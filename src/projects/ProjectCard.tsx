@@ -1,5 +1,4 @@
 import { Project } from "./Project";
-
 interface ProjectCardProps {
     project: Project;
 }
