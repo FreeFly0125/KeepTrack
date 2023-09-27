@@ -13,33 +13,53 @@ function ProjectForm(props: ProjectFormProps) {
     } = props;
 
     const [project, setProject] = useState(initialProject);
+    const [error, setError] = useState({
+        name: '',
+        description: '',
+        budget: ''
+    });
 
     const handleSubmit = (event: any) => {
         event.preventDefault();
+        if (!isValid()) return;
         onSave(project);
     };
 
     const handleChange = (event: any) => {
         const { type, name, value, checked } = event.target;
-
         let updatedValue = type === 'checkbox' ? checked : value;
-
         if (type === 'number') {
             updatedValue = Number(updatedValue);
         }
-
         const change = {
             [name]: updatedValue,
         };
-
         let updatedProject: Project;
-
         setProject((p) => {
             updatedProject = new Project({ ...p, ...change });
             return updatedProject;
         });
-
+        setError(() => validate(updatedProject));
     }
+
+    const validate = (project: Project) => {
+        let newError: any = { name: '', description: '', budget: '' };
+        if (project.name.length === 0) {
+            newError.name = "Name in required!";
+        }
+        else if (project.name.length < 3) {
+            newError.name = "Name needs to be more than 3 characters";
+        }
+        if (project.description.length === 0) {
+            newError.description = "Description is required!";
+        }
+        if (project.budget === 0) {
+            newError.budget = "Budget must be more than $0";
+        }
+        return newError;
+    }
+
+    const isValid = () => (error.name.length === 0 && error.description.length === 0 && error.budget.length === 0);
 
     return (
         <form className="input-group vertical" onSubmit={handleSubmit}>
@@ -51,6 +71,11 @@ function ProjectForm(props: ProjectFormProps) {
                 value={project.name}
                 onChange={handleChange}
             />
+            {error.name.length > 0 && (
+                <div className="card error">
+                    <p>{error.name}</p>
+                </div>
+            )}
 
             <label htmlFor="description">Project Description</label>
             <textarea
@@ -59,6 +84,11 @@ function ProjectForm(props: ProjectFormProps) {
                 value={project.description}
                 onChange={handleChange}
             />
+            {error.description.length > 0 && (
+                <div className="card error">
+                    <p>{error.description}</p>
+                </div>
+            )}
 
             <label htmlFor="budget">Project Budget</label>
             <input
@@ -68,6 +98,11 @@ function ProjectForm(props: ProjectFormProps) {
                 value={project.budget}
                 onChange={handleChange}
             />
+            {error.budget.length > 0 && (
+                <div className="card error">
+                    <p>{error.budget}</p>
+                </div>
+            )}
 
             <label htmlFor="isActive">Active?</label>
             <input

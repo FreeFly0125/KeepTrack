@@ -5,7 +5,7 @@ interface ProjectCardProps {
 }
 
 function formatDescription(description: string): string {
-    return description.substring(0, 60) + "...";
+    return description.length > 60 ? description.substring(0, 60) + "..." : description;
 }
 
 function ProjectCard(props: ProjectCardProps) {
