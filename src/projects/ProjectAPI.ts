@@ -1,3 +1,4 @@
+import { parse } from "path";
 import { Project } from "./Project";
 const baseUrl = "http://localhost:4000";
 const url = `${baseUrl}/projects`;
@@ -80,6 +81,13 @@ const projectAPI = {
 					"There was an error updating the project. Please try again."
 				);
 			});
+	},
+
+	find(id: Number) {
+		return fetch(`${url}/${id}`)
+			.then(checkStatus)
+			.then(parseJSON)
+			.then(convertToProjectModel);
 	},
 };
 
