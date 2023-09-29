@@ -1,4 +1,3 @@
-import { parse } from "path";
 import { Project } from "./Project";
 const baseUrl = "http://localhost:4000";
 const url = `${baseUrl}/projects`;
